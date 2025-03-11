@@ -1,0 +1,29 @@
+{
+    "manifest_version": 3,
+    "name": "X Politics Blocker",
+    "version": "1.0",
+    "description": "Blocks political content from X.com",
+    "permissions": [
+        "storage",
+        "activeTab"
+    ],
+    "host_permissions": [
+        "*://*.x.com/*",
+        "*://*.twitter.com/*"
+    ],
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.x.com/*",
+                "*://*.twitter.com/*"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "run_at": "document_idle"
+        }
+    ]
+}

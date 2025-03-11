@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>X Politics Blocker</title>
+  <style>
+    body {
+      width: 350px;
+      padding: 15px;
+      font-family: Arial, sans-serif;
+}
+    .toggle-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+}
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+}
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+}
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+}
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+}
+    input:checked + .slider {
+      background-color: #2196F3;
+}
+    input:checked + .slider:before {
+      transform: translateX(26px);
+}
+    h1 {
+      font-size: 20px;
+      margin-bottom: 15px;
+}
+    .keyword-container {
+      margin-top: 20px;
+}
+    #keywordInput {
+      width: 70%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+}
+    button {
+      padding: 8px 12px;
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      margin-left: 5px;
+}
+    button:hover {
+      background-color: #0b7dda;
+}
+    #keywordsList {
+      margin-top: 15px;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      padding: 5px;
+}
+    .keyword-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 5px;
+      border-bottom: 1px solid #eee;
+      align-items: center;
+}
+    .keyword-item:last-child {
+      border-bottom: none;
+}
+    .remove-btn {
+      background-color: #f44336;
+      padding: 4px 8px;
+      font-size: 12px;
+}
+    .batch-actions {
+      margin-top: 15px;
+      display: flex;
+      justify-content: space-between;
+}
+    .category-select {
+      margin-top: 15px;
+      width: 100%;
+}
+    select {
+      width: 70%;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+}
+    .add-category-btn {
+      width: 28%;
+}
+    .tab-buttons {
+      display: flex;
+      margin-bottom: 15px;
+}
+    .tab-button {
+      flex: 1;
+      padding: 8px;
+      background-color: #f1f1f1;
+      border: none;
+      outline: none;
+      cursor: pointer;
+}
+    .tab-button.active {
+      background-color: #2196F3;
+      color: white;
+}
+    .tab-button:first-child {
+      border-radius: 4px 0 0 4px;
+}
+    .tab-button:last-child {
+      border-radius: 0 4px 4px 0;
+}
+    .tab-content {
+      display: none;
+}
+    .tab-content.active {
+      display: block;
+}
+    .keyword-count {
+      font-size: 14px;
+      color: #666;
+      margin-top: 5px;
+      margin-bottom: 10px;
+}
+    .search-container {
+      margin-bottom: 10px;
+}
+    #searchKeywords {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 5px;
+}
+  </style>
+</head>
+<body>
+  <h1>X Politics Blocker</h1>
+  
+  <div class="toggle-container">
+    <span>Enable Politics Blocker</span>
+    <label class="switch">
+      <input type="checkbox" id="blockerToggle" checked>
+      <span class="slider"></span>
+    </label>
+  </div>
+  
+  <div class="tab-buttons">
+    <button class="tab-button active" data-tab="manage-tab">Manage Keywords</button>
+    <button class="tab-button" data-tab="add-tab">Add Keywords</button>
+  </div>
+  
+  <div id="manage-tab" class="tab-content active">
+    <div class="keyword-container">
+      <div class="search-container">
+        <input type="text" id="searchKeywords" placeholder="Search keywords...">
+      </div>
+      <div class="keyword-count" id="keywordCount"></div>
+      <div id="keywordsList"></div>
+      
+      <div class="batch-actions">
+        <button id="clearKeywords">Clear All Keywords</button>
+        <button id="restoreDefaults">Restore Defaults</button>
+      </div>
+    </div>
+  </div>
+  
+  <div id="add-tab" class="tab-content">
+    <div class="keyword-container">
+      <h2>Add Single Keyword</h2>
+      <div>
+        <input type="text" id="keywordInput" placeholder="Add political keyword...">
+        <button id="addKeyword">Add</button>
+      </div>
+      
+      <h2>Add Keyword Category</h2>
+      <div class="category-select">
+        <select id="categorySelect">
+          <option value="">Select a category...</option>
+          <option value="conservative">Conservative Terms</option>
+          <option value="progressive">Progressive Terms</option>
+          <option value="politicians">Politicians</option>
+          <option value="media">Media Outlets</option>
+          <option value="issues">Political Issues</option>
+        </select>
+        <button id="addCategory" class="add-category-btn">Add All</button>
+      </div>
+      
+      <h2>Import Keywords</h2>
+      <textarea id="bulkImport" placeholder="Enter keywords separated by commas or new lines" rows="4" style="width: 100%; margin-top: 5px; padding: 8px; border-radius: 4px; border: 1px solid #ddd;"></textarea>
+      <button id="importKeywords" style="margin-top: 10px; width: 100%;">Import Keywords</button>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
